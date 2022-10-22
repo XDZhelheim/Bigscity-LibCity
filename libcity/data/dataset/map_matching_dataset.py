@@ -44,6 +44,7 @@ class MapMatchingDataset(AbstractDataset):
 
         # features
         self.with_time = config.get('with_time', True)  # 输入轨迹数据是否包含时间
+        # print("-----WithTime = ", self.with_time)
         self.delta_time = config.get('delta_time', True)  # True则轨迹输入时间差(s)，False则轨迹输入时间datetime.datetime
         self.with_rd_speed = ('speed' in config['rel']['geo'].keys())
 
@@ -129,6 +130,7 @@ class MapMatchingDataset(AbstractDataset):
             # origin and destination
             from_id = int(row[2])
             to_id = int(row[3])
+            # print("------", from_id, to_id, to_id + geo_num, geo_num)
             node_set.union(from_id, to_id + geo_num)
 
         # generate MultiDigraph
@@ -136,6 +138,9 @@ class MapMatchingDataset(AbstractDataset):
 
             geo_id = int(row['geo_id'])
             coordinate = eval(row['coordinates'])
+            # print("------", coordinate)
+            if not coordinate[0]:
+                continue
             origin_node = node_set.find(geo_id + geo_num)
             dest_node = node_set.find(geo_id)
             if origin_node not in self.rd_nwk.nodes:

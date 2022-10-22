@@ -77,6 +77,10 @@ class HMMM(AbstractTraditionModel):
         self._preprocess()
         self._logger.info('finish preprocessing')
         self._get_candidates()
+        # if not self.candidates[0]:
+        #     self._logger.warning('no candidates found')
+        #     self.candidates = list()
+        #     return
         self._logger.info('finish getting candidates')
         self._observation_probability()
         self._logger.info('finish calculating observation probability')
@@ -223,7 +227,7 @@ class HMMM(AbstractTraditionModel):
             j = i - 1
             if len(self.candidates[i]) == 0:
                 k = i + 1
-                while len(self.candidates[k]) == 0 and k < len(self.candidates):
+                while k < len(self.candidates) and len(self.candidates[k]) == 0:
                     k += 1
                 if k == len(self.candidates):
                     break
